@@ -1,0 +1,6 @@
+.env
+__pycache__/
+*.pyc
+samsung_last_event.json
+*.png
+.streamlit/

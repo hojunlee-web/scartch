@@ -1,0 +1,17 @@
+{
+    "SamsungBiologics": [
+        {"period": "2024 1Q", "revenue": 946.9, "op_income": 221.3},
+        {"period": "2024 2Q", "revenue": 1156.9, "op_income": 434.5},
+        {"period": "2024 3Q", "revenue": 1187.1, "op_income": 338.6},
+        {"period": "2024 4Q", "revenue": 1256.4, "op_income": 325.7},
+        {"period": "2025 1Q", "revenue": 946.9, "op_income": 221.3},
+        {"period": "2025 2Q", "revenue": 1156.9, "op_income": 434.5},
+        {"period": "2025 3Q", "revenue": 1660.2, "op_income": 728.8},
+        {"period": "2025 4Q", "revenue": 1285.7, "op_income": 528.3}
+    ],
+    "SamsungBioepis": [
+        {"period": "2024 Annual", "revenue": 1537.7, "op_income": 435.4},
+        {"period": "2025 Annual", "revenue": 1672.0, "op_income": 375.9},
+        {"period": "2025 4Q", "revenue": 429.4, "op_income": 29.2}
+    ]
+}
