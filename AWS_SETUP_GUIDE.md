@@ -56,4 +56,29 @@ git push origin master
 ```
 
 ---
+
+## [추가] VS Code에서 서버 접속하기 (Remote - SSH)
+매번 웹 브라우저로 접속하는 것보다 VS Code의 **Remote - SSH** 확장을 사용하면 훨씬 편리하게 개발할 수 있습니다.
+
+### 1단계: 키 파일(.pem) 준비
+1. Lightsail 콘솔의 **'계정(Account)' -> 'SSH 키(SSH Keys)'** 메뉴로 이동합니다.
+2. 사용 중인 리전(주로 Seoul)의 기본 키를 **다운로드**하여 본인 컴퓨터의 안전한 곳(예: `C:\Users\이호준\.ssh\`)에 저장합니다.
+
+### 2단계: VS Code 설정
+1. VS Code에서 **'Remote - SSH'** 확장을 설치합니다.
+2. 왼쪽 하단의 파란색 **'><' (Open a Remote Window)** 아이콘을 클릭합니다.
+3. **'Connect to Host...'** -> **'Configure SSH Hosts...'** -> 첫 번째 경로(주로 `config`)를 선택합니다.
+4. 아래 형식을 참고하여 입력하고 저장합니다:
+   ```text
+   Host samsung-monitor
+       HostName [본인의 Lightsail 고정 IP]
+       User ubuntu
+       IdentityFile C:\Users\이호준\.ssh\LightsailDefaultKey-ap-northeast-2.pem
+   ```
+
+### 3단계: 접속
+1. 다시 파란색 아이콘 클릭 -> **'Connect to Host...'** -> **'samsung-monitor'**를 선택합니다.
+2. 새 창이 열리면서 서버에 연결됩니다. 이제 **'Open Folder'**를 눌러 `/home/ubuntu/scartch` 폴더를 열어 작업하세요!
+
+---
 **축하합니다!** 이제 AWS 서버가 당신을 대신해 24시간 실적을 감시하고 보고합니다.
