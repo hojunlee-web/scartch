@@ -69,6 +69,8 @@ def show_samsung_page():
     # --- 2. 삼성바이오에피스 섹션 ---
     st.header("🧬 삼성바이오에피스 (Samsung Bioepis)")
     
+    st.write("DEBUG DATA:", data.keys()) # 디버그용 출력
+    
     if "SamsungBioepis" in data:
         bioepis_df = pd.DataFrame(data["SamsungBioepis"])
         
