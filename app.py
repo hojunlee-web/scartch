@@ -23,7 +23,7 @@ dev_mode = st.sidebar.checkbox("🛠️ 관리자 모드 활성화", value=False
 
 menu_options = ["📊 삼성바이오 실적 분석", "📚 신간 발간 소식 (인문/소설)"]
 if dev_mode:
-    menu_options.extend(["🔬 AI 가상 연구소 동향", "📂 경력 모니터링", "🏫 국제중학교 입시설계", "₿ 가상화폐 매매 현황"])
+    menu_options.extend(["🏢 글로벌 빅파마 실적 및 시사점", "🔬 AI 가상 연구소 동향", "📂 경력 모니터링", "🏫 국제중학교 입시설계", "₿ 가상화폐 매매 현황"])
 
 page = st.sidebar.selectbox("메뉴를 선택하세요", menu_options)
 
@@ -140,6 +140,42 @@ def show_ai_research_page():
     
     st.text_area("마우스로 전체 선택(Ctrl+A) 후 복사(Ctrl+C) 하세요:", value=notebooklm_text, height=300)
 
+def show_pharma_earnings_page():
+    st.title("🏢 글로벌 빅파마 실적 & 시사점 분석")
+    st.markdown("글로벌 Top 10 제약사 및 유력 경쟁사의 최근 실적을 바탕으로 **삼성바이오에피스** 비즈니스에 대한 시사점을 AI가 자동으로 도출합니다.")
+    
+    REPORT_FILE = os.path.join(BASE_DIR, "pharma_earnings_report.json")
+    if not os.path.exists(REPORT_FILE):
+        st.info("아직 수집된 글로벌 파마 실적 데이터가 없습니다.")
+        return
+        
+    with open(REPORT_FILE, "r", encoding="utf-8") as f:
+        data = json.load(f)
+        
+    st.caption(f"🔄 마지막 리포트 업데이트: {data.get('last_updated', '알 수 없음')}")
+    st.divider()
+    
+    analysis = data.get("analysis", {})
+    
+    col1, col2 = st.columns([1, 1])
+    with col1:
+        st.subheader("📊 주요 동향 요약")
+        st.markdown(analysis.get("summary", "데이터 없음"))
+        
+    with col2:
+        st.subheader("💡 삼성바이오에피스 시사점 (자사 파이프라인 & ADC)")
+        st.info(analysis.get("implications", "데이터 없음"))
+        
+    st.divider()
+    st.subheader("📋 NotebookLM 슬라이드 제작용 원문 데이터")
+    st.markdown("아래 텍스트를 복사하여 NotebookLM에 붙여넣고 '핵심 시사점 슬라이드를 정리해줘'라고 명령하세요.")
+    
+    notebooklm_text = f"분석 일자: {data.get('last_updated', '')}\n\n"
+    notebooklm_text += f"--- 1. 글로벌 빅파마 실적 동향 ---\n{analysis.get('summary', '')}\n\n"
+    notebooklm_text += f"--- 2. 삼성바이오에피스 시사점 ---\n{analysis.get('implications', '')}\n"
+    
+    st.text_area("마우스로 전체 선택(Ctrl+A) 후 복사(Ctrl+C) 하세요:", value=notebooklm_text, height=200)
+
 def show_books_page():
     st.title("📚 작가별 신간 발간 신호 모니터링")
     st.markdown("관심 작가 5인의 최신 도서 출간 소식을 AI가 매일 자동 분석하여 알려줍니다.")
@@ -245,6 +281,8 @@ elif page == "🔬 AI 가상 연구소 동향":
     show_ai_research_page()
 elif page == "📚 신간 발간 소식 (인문/소설)":
     show_books_page()
+elif page == "🏢 글로벌 빅파마 실적 및 시사점":
+    show_pharma_earnings_page()
 elif page == "📂 경력 모니터링":
     show_career_page()
 elif page == "🏫 국제중학교 입시설계":
