@@ -122,6 +122,23 @@ def show_ai_research_page():
     if os.path.exists(IMAGE_FILE):
         st.image(IMAGE_FILE, use_container_width=True)
     st.markdown(latest['analysis'])
+    
+    st.divider()
+    st.subheader("📋 NotebookLM 슬라이드/인포그래픽 제작용 원문 데이터")
+    st.markdown("아래의 텍스트를 복사하여 Google NotebookLM에 붙여넣고 **'슬라이드 개요를 짜줘'** 또는 **'인포그래픽용 핵심 요약을 만들어줘'** 라고 명령하세요.")
+    
+    # NotebookLM을 위한 텍스트 취합
+    notebooklm_text = f"보고서 생성일: {latest['date']}\n\n"
+    notebooklm_text += "--- 1. 최신 연구 논문 리스트 ---\n"
+    for r in latest.get('researches', []):
+        notebooklm_text += f"- 제목: {r.get('title')}\n"
+        notebooklm_text += f"  저널: {r.get('journal')} ({r.get('date')})\n"
+        notebooklm_text += f"  링크: {r.get('url')}\n"
+    
+    notebooklm_text += "\n--- 2. AI 전략 분석 요약 ---\n"
+    notebooklm_text += latest.get('analysis', '')
+    
+    st.text_area("마우스로 전체 선택(Ctrl+A) 후 복사(Ctrl+C) 하세요:", value=notebooklm_text, height=300)
 
 def show_books_page():
     st.title("📚 작가별 신간 발간 신호 모니터링")
