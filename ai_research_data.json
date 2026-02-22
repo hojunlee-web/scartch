@@ -1,0 +1,38 @@
+{
+    "core_papers": [
+        {
+            "id": "nature_2025_virtual_lab",
+            "title": "The Virtual Lab of AI agents designs new SARS-CoV-2 nanobodies",
+            "journal": "Nature",
+            "date": "2025-07",
+            "key_concept": "Multi-agent autonomous research framework",
+            "roles": {
+                "PI Agent": "Guides the research direction and meetings",
+                "Scientist Agents": "Execute computational design and analysis",
+                "Critic Agent": "Error checking and logical verification"
+            },
+            "findings": "Designed 92 new nanobodies, validated experimentally with improved binding to JN.1 and KP.3 variants.",
+            "impact": "Shift from passive AI tools to active collaborative discovery engines."
+        },
+        {
+            "id": "cell_2025_ai_coscientist",
+            "title": "AI mirrors experimental science to uncover a mechanism of gene transfer",
+            "journal": "Cell",
+            "date": "2025-11",
+            "key_concept": "AI Co-Scientist for hypothesis generation",
+            "mechanism": "cf-PICIs hijacking phage tails for cross-species spread",
+            "performance": "Matched 10 years of human research in 2 days",
+            "impact": "Proposing previously overlooked biological possibilities, overcoming human bias."
+        }
+    ],
+    "related_trends_2025": [
+        {
+            "title": "Agents4Science 2025",
+            "focus": "LLM agents as primary authors and reviewers"
+        },
+        {
+            "title": "PersonaAI",
+            "focus": "Interactive agentic-AI for aging research hypothesis validation"
+        }
+    ]
+}
