@@ -137,7 +137,7 @@ if __name__ == "__main__":
             except Exception as e:
                 log_message(f"루프 실행 중 예상치 못한 에러: {e}")
             
-            # 주간 모니터링이므로 7일에 한 번씩 실행 (60 * 60 * 24 * 7 = 604,800 초)
-            sleep_time = 604800
-            log_message(f"다음 실행을 위해 {sleep_time}초(약 7일) 대기합니다...")
+            # 월간 모니터링이므로 30일에 한 번씩 실행 (60 * 60 * 24 * 30 = 2,592,000 초)
+            sleep_time = 2592000
+            log_message(f"다음 실행을 위해 {sleep_time}초(약 30일) 대기합니다...")
             time.sleep(sleep_time)

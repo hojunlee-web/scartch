@@ -184,6 +184,6 @@ if __name__ == "__main__":
             except Exception as e:
                 log_message(f"루프 실행 중 예상치 못한 에러: {e}")
             
-            sleep_time = 604800  # 7일
-            log_message(f"다음 실행을 위해 {sleep_time}초(약 7일) 대기합니다...")
+            sleep_time = 2592000  # 30일
+            log_message(f"다음 실행을 위해 {sleep_time}초(약 30일) 대기합니다...")
             time.sleep(sleep_time)
