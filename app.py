@@ -21,7 +21,7 @@ st.sidebar.title("🌟 Hojun's Master Dashboard")
 # 개발자/관리자용 토글 추가 (쉽게 접근 가능하도록 항상 표시)
 dev_mode = st.sidebar.checkbox("🛠️ 관리자 모드 활성화", value=False)
 
-menu_options = ["📊 삼성바이오 실적 분석", "🔬 AI 가상 연구소 동향"]
+menu_options = ["📊 삼성바이오 실적 분석", "🔬 AI 가상 연구소 동향", "📚 신간 발간 소식 (인문/소설)"]
 if dev_mode:
     menu_options.extend(["📂 경력 모니터링", "🏫 국제중학교 입시설계", "₿ 가상화폐 매매 현황"])
 
@@ -123,6 +123,41 @@ def show_ai_research_page():
         st.image(IMAGE_FILE, use_container_width=True)
     st.markdown(latest['analysis'])
 
+def show_books_page():
+    st.title("📚 작가별 신간 발간 신호 모니터링")
+    st.markdown("관심 작가 5인의 최신 도서 출간 소식을 AI가 매일 자동 분석하여 알려줍니다.")
+    
+    REPORT_FILE = os.path.join(BASE_DIR, "author_books_report.json")
+    if not os.path.exists(REPORT_FILE):
+        st.info("아직 수집된 도서 모니터링 데이터가 없습니다.")
+        return
+        
+    with open(REPORT_FILE, "r", encoding="utf-8") as f:
+        data = json.load(f)
+        
+    st.caption(f"🔄 마지막 업데이트: {data.get('date', '알 수 없음')}")
+    st.divider()
+    
+    # 5명의 작가를 2행(3개, 2개) 또는 3컬럼 등으로 배치
+    authors_data = data.get("authors", {})
+    cols = st.columns(3)
+    
+    for i, (author, info) in enumerate(authors_data.items()):
+        col = cols[i % 3]
+        with col:
+            st.subheader(f"✒️ {author}")
+            status = info.get("status", "알 수 없음")
+            if "신간 출시" in status:
+                st.success(f"**상태:** {status}")
+            else:
+                st.write(f"**상태:** {status}")
+            
+            st.write(f"**최근 포착 도서:** {info.get('book_title', '-')}")
+            
+            with st.expander("AI 분석 요약"):
+                st.write(info.get("summary", "내용 없음"))
+            st.write("---")
+
 def show_career_page():
     st.title("📂 개인 경력 관리")
     st.success("🔓 상무/이사급 이직 기회 모니터링 중입니다.")
@@ -191,6 +226,8 @@ if page == "📊 삼성바이오 실적 분석":
     show_samsung_page()
 elif page == "🔬 AI 가상 연구소 동향":
     show_ai_research_page()
+elif page == "📚 신간 발간 소식 (인문/소설)":
+    show_books_page()
 elif page == "📂 경력 모니터링":
     show_career_page()
 elif page == "🏫 국제중학교 입시설계":
