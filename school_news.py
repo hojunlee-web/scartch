@@ -18,7 +18,11 @@ model = genai.GenerativeModel('models/gemini-2.5-flash')
 def post_log(message):
     now = datetime.now().strftime('[%Y-%m-%d %H:%M:%S]')
     log_msg = f"{now} [INT-SCHOOL] {message}"
-    print(log_msg, flush=True)
+    try:
+        print(log_msg, flush=True)
+    except UnicodeEncodeError:
+        print(log_msg.encode('ascii', 'ignore').decode('ascii'), flush=True)
+        
     log_path = os.path.join(os.path.dirname(__file__), "school_bot.log")
     with open(log_path, "a", encoding="utf-8") as f:
         f.write(log_msg + "\n")
