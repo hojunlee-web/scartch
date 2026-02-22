@@ -3,6 +3,7 @@ import json
 import time
 import requests
 import datetime
+import subprocess
 from dotenv import load_dotenv
 import google.generativeai as genai
 import sys
@@ -129,6 +130,24 @@ def analyze_book_news(author, search_results):
         log_message(f"Gemini AI 분석 오류 ({author}): {e}")
         return {"is_new_book": False, "summary": f"AI 분석 오류: {e}"}
 
+def push_to_github():
+    log_message("GitHub로 리포트 자동 업로드 시도 중...")
+    try:
+        subprocess.run(["git", "add", "author_books_report.json", "seen_author_books.json"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        
+        # 변경 사항이 있을 때만 커밋 및 푸시
+        status = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True)
+        if status.stdout.strip():
+            timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            subprocess.run(["git", "commit", "-m", f"Auto-update book report: {timestamp}"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            # 호환성을 위해 main 분기에서 origin master로 강제 푸시 (Streamlit Cloud 동기화)
+            subprocess.run(["git", "push", "origin", "main:master"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            log_message("GitHub 업로드 성공! 대시보드가 곧 갱신됩니다.")
+        else:
+            log_message("새로운 변경 사항이 없어 GitHub 업로드를 건너뜁니다.")
+    except Exception as e:
+        log_message(f"GitHub 자동 업로드 실패: {e}")
+
 def run_book_monitor():
     log_message("=== 작가 신간 모니터링 시작 ===")
     seen_books = load_seen_books()
@@ -171,6 +190,10 @@ def run_book_monitor():
         
     save_seen_books(seen_books)
     save_report_data(report_data)
+    
+    # 생성된 최신 데이터를 터미널과 연결된 깃허브로 업로드
+    push_to_github()
+    
     log_message("=== 작가 신간 모니터링 종료 ===")
 
 if __name__ == "__main__":
