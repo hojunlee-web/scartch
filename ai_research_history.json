@@ -1,0 +1,20 @@
+[
+    {
+        "date": "2026-02-22",
+        "researches": [
+            {
+                "title": "The Virtual Lab of AI agents designs new SARS-CoV-2 nanobodies",
+                "journal": "Nature",
+                "date": "2025-07",
+                "url": "https://www.nature.com/articles/s41586-025-virtual-lab"
+            },
+            {
+                "title": "AI mirrors experimental science to uncover a mechanism of gene transfer",
+                "journal": "Cell",
+                "date": "2025-11",
+                "url": "https://www.cell.com/cell/fulltext/AI-co-scientist"
+            }
+        ],
+        "analysis": "## 🔬 AI 가상 연구소 최신 동향 분석 (2025-2026)\n\n### 1. 가상 연구소(Virtual Lab)의 부상 (Nature 2025.07)\n- **핵심 내용**: PI, Scientist, Critic 역할을 하는 다중 AI 에이전트가 협업하여 신규 SARS-CoV-2 항체를 설계.\n- **혁신성**: AI가 제안한 92개의 항체 중 실제 유효한 결합력을 가진 항체 다수 확인.\n- **Slide 1: Overview** - 자율 연구 에이전트들의 단기 집중 연구 시스템 구축 및 실증.\n\n### 2. AI Co-Scientist의 유전자 기전 규명 (Cell 2025.11)\n- **핵심 내용**: 인간이 10년간 연구한 박테리아 유전자 이동 기전을 AI가 단 이틀 만에 규명.\n- **Slide 2: Methodology** - 가설 생성 및 검증 파이프라인이 인간의 편향을 넘어선 새로운 과학적 사실 발견에 기여.\n\n### 3. 인포그래픽 데이터 및 전략적 시사점\n- **에이전트 구조**: PI(전략) -> Scientist(실행) -> Critic(검토)의 선순환 구조.\n- **시사점**: 제약/바이오 R&D 프로세스가 'AI 중심 자율 연구소'로 빠르게 전환 중.\n"
+    }
+]
