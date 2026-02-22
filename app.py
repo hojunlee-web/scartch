@@ -18,17 +18,8 @@ st.set_page_config(
 # --- 1. 사이드바 네비게이션 & 보안 설정 ---
 st.sidebar.title("🌟 Hojun's Master Dashboard")
 
-# URL에서 is_admin 파라미터 확인 (가급적 에러가 나지 않는 방식으로)
-try:
-    if hasattr(st, 'query_params'):
-        is_admin_from_url = st.query_params.get("view") == "admin"
-    else:
-        is_admin_from_url = st.experimental_get_query_params().get("view", [""])[0] == "admin"
-except:
-    is_admin_from_url = False
-
 # 개발자/관리자용 토글 추가 (쉽게 접근 가능하도록 항상 표시)
-dev_mode = st.sidebar.checkbox("🛠️ 관리자 모드 활성화", value=is_admin_from_url)
+dev_mode = st.sidebar.checkbox("🛠️ 관리자 모드 활성화", value=False)
 
 menu_options = ["📊 삼성바이오 실적 분석", "🔬 AI 가상 연구소 동향"]
 if dev_mode:
