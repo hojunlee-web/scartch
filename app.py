@@ -4,6 +4,9 @@ import json
 import plotly.graph_objects as go
 from datetime import datetime
 import os
+import sys
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # 페이지 설정
 st.set_page_config(
@@ -25,9 +28,12 @@ except:
     query_params = st.experimental_get_query_params()
     is_admin = query_params.get("view", [""])[0] == "admin"
 
+# 개발자/관리자용 토글 추가 (쉽게 접근 가능하도록)
+dev_mode = st.sidebar.checkbox("🛠️ 관리자 모드 활성화", value=is_admin)
+
 menu_options = ["📊 삼성바이오 실적 분석", "🔬 AI 가상 연구소 동향"]
-if is_admin:
-    menu_options.extend(["📂 경력 모니터링 (비밀)", "🏫 국제중학교 입시설계", "₿ 가상화폐 매매 현황"])
+if dev_mode:
+    menu_options.extend(["📂 경력 모니터링", "🏫 국제중학교 입시설계", "₿ 가상화폐 매매 현황"])
 
 page = st.sidebar.selectbox("메뉴를 선택하세요", menu_options)
 
@@ -42,7 +48,7 @@ st.sidebar.info("""
 
 def show_samsung_page():
     st.title("🚀 삼성바이오 실적 분석 대시보드")
-    DATA_FILE = "samsung_historical_data.json"
+    DATA_FILE = os.path.join(BASE_DIR, "samsung_historical_data.json")
     if not os.path.exists(DATA_FILE):
         st.error("데이터 파일을 찾을 수 없습니다.")
         return
@@ -61,13 +67,61 @@ def show_samsung_page():
         fig1.update_layout(title="분기별 매출 및 영업이익 추이", height=500)
         st.plotly_chart(fig1, use_container_width=True)
     with col2:
-        st.subheader("💡 주요 인사이트")
-        st.info("4공장 풀 가동 및 고부가가치 수주 확대로 사상 최대 매출 달성.")
+        st.subheader("💡 2025년 4분기 주요 포인트")
+        st.info("""
+        - **사상 최대 매출**: 2025년 연간 매출 4.56조 원 달성.
+        - **수익성 개선**: 영업이익 5,283억 원 기록.
+        - **성장 동력**: 4공장의 풀 가동 및 고부가가치 수주 확대.
+        """)
+
+    st.divider()
+
+    # --- 2. 삼성바이오에피스 섹션 ---
+    st.header("🧬 삼성바이오에피스 (Samsung Bioepis)")
+    
+    if "SamsungBioepis" in data:
+        bioepis_df = pd.DataFrame(data["SamsungBioepis"])
+        
+        # 분기 데이터만 필터링
+        quarter_data = bioepis_df[bioepis_df['period'].str.contains('Q')]
+        
+        if not quarter_data.empty:
+            colors_epis = ['#B7E4C7'] * (len(quarter_data) - 1) + ['#EF233C']
+            
+            fig2 = go.Figure()
+            fig2.add_trace(go.Bar(
+                x=quarter_data['period'], y=quarter_data['revenue'],
+                name='매출액(십억)', marker_color=colors_epis,
+                text=quarter_data['revenue'], textposition='auto'
+            ))
+            fig2.add_trace(go.Scatter(
+                x=quarter_data['period'], y=quarter_data['op_income'],
+                name='영업이익(십억)', mode='lines+markers+text',
+                line=dict(color='#2B2D42', width=3),
+                text=quarter_data['op_income'], textposition='top center'
+            ))
+            fig2.update_layout(title="실적 추이 (빨간색: 최신 데이터)", height=400)
+            st.plotly_chart(fig2, use_container_width=True)
+        
+        st.subheader("📅 연간 실적 요약")
+        annual_data = bioepis_df[bioepis_df['period'].str.contains('Annual')]
+        st.table(annual_data)
+
+    st.divider()
+    st.header("🤖 AI 투자 브리핑 (Gemini Analysis)")
+    st.write("""
+    삼성바이오 그룹은 2025년 '성장'과 '수익성' 두 마리 토끼를 모두 잡았습니다. 
+    로직스의 4.5조 매출 돌파는 국내 바이오 역사상 전무후무한 기록이며, 에피스의 바이오시밀러 
+    글로벌 점유율 확대 역시 긍정적인 신호입니다. 
+    
+    특히 환율 효과와 공장 가동 효율 극대화를 통해 영업이익률이 크게 개선되었으며, 
+    2026년 예정된 신규 공장 및 기술 포트폴리오 확장은 추가적인 업사이드를 기대하게 합니다.
+    """)
 
 def show_ai_research_page():
     st.title("🔬 AI 에이전트 가상 연구소 전략 대시보드")
-    HISTORY_FILE = "ai_research_history.json"
-    IMAGE_FILE = "virtual_lab_infographic_v1.png"
+    HISTORY_FILE = os.path.join(BASE_DIR, "ai_research_history.json")
+    IMAGE_FILE = os.path.join(BASE_DIR, "virtual_lab_infographic_v1.png")
     if not os.path.exists(HISTORY_FILE):
         st.warning("아직 수집된 연구 데이터가 없습니다.")
         return
@@ -80,42 +134,63 @@ def show_ai_research_page():
     st.markdown(latest['analysis'])
 
 def show_career_page():
-    st.title("📂 개인 경력 관리 (Secret Mode)")
-    st.success("🔓 관리자 모드: 상무/이사급 이직 기회 모니터링 중입니다.")
-    if os.path.exists("seen_career_opportunities.json"):
-        with open("seen_career_opportunities.json", "r", encoding="utf-8") as f:
-            seen_jobs = json.load(f)
-        st.write(f"탐색된 기회: {len(seen_jobs)}건")
+    st.title("📂 개인 경력 관리")
+    st.success("🔓 상무/이사급 이직 기회 모니터링 중입니다.")
+    
+    LATEST_REPORT = os.path.join(BASE_DIR, "career_report_latest.json")
+    if os.path.exists(LATEST_REPORT):
+        with open(LATEST_REPORT, "r", encoding="utf-8") as f:
+            report_data = json.load(f)
+        st.info(f"📅 최근 분석 일시: {report_data['date']}")
+        st.markdown(report_data['full_report'])
     else:
-        st.write("최근 2주간 탐색된 새로운 기회가 없습니다. 봇 가동 상태를 확인해 주세요.")
+        st.info("아직 생성된 커리어 리포트가 없습니다. 봇을 1회 실행해 주세요.")
+    
+    st.divider()
+    SEEN_FILE = os.path.join(BASE_DIR, "seen_career_opportunities.json")
+    if os.path.exists(SEEN_FILE):
+        with open(SEEN_FILE, "r", encoding="utf-8") as f:
+            seen_jobs = json.load(f)
+        st.write(f"탐색된 누적 기회: {len(seen_jobs)}건")
 
 def show_school_page():
-    st.title("🏫 국제중학교 입시설계 (Secret Mode)")
-    st.success("🔓 관리자 모드: 자녀 국제중 입시 최신 뉴스 및 대응 전략입니다.")
-    LOG_FILE = "school_bot.log"
+    st.title("🏫 국제중학교 입시설계")
+    st.success("🔓 자녀 국제중 입시 최신 뉴스 및 대응 전략입니다.")
+    
+    LATEST_REPORT = os.path.join(BASE_DIR, "school_report_latest.json")
+    if os.path.exists(LATEST_REPORT):
+        with open(LATEST_REPORT, "r", encoding="utf-8") as f:
+            report_data = json.load(f)
+        st.info(f"📅 최근 분석 일시: {report_data['date']}")
+        st.markdown(report_data['content'])
+    
+    st.divider()
+    LOG_FILE = os.path.join(BASE_DIR, "school_bot.log")
     if os.path.exists(LOG_FILE):
         with open(LOG_FILE, "r", encoding="utf-8") as f:
             logs = f.readlines()
-        st.text_area("최신 입시 뉴스 로그 (최근 20줄)", "".join(logs[-20:]), height=300)
+        st.text_area("입시 뉴스 상세 로그", "".join(logs[-20:]), height=200)
     else:
-        st.info("아직 수집된 학교 입시 로그가 없습니다. (school_news.py 가동 필요)")
+        st.info("입시 로그가 아직 수집되지 않았습니다.")
 
 def show_crypto_page():
-    st.title("₿ 가상화폐 매매 현황 (Secret Mode)")
-    st.success("🔓 관리자 모드: BTC/ETH 자동 매매 실시간 상태입니다.")
+    st.title("₿ 가상화폐 매매 현황")
+    st.success("🔓 BTC/ETH 자동 매매 실시간 상태입니다.")
     col1, col2 = st.columns(2)
     with col1:
         st.subheader("BTC Auto Buy")
-        if os.path.exists("btc_auto.log"):
-            with open("btc_auto.log", "r", encoding="utf-8") as f:
+        BTC_LOG = os.path.join(BASE_DIR, "btc_auto.log")
+        if os.path.exists(BTC_LOG):
+            with open(BTC_LOG, "r", encoding="utf-8") as f:
                 st.text("최근 BTC 로그")
                 st.code("".join(f.readlines()[-10:]))
         else:
             st.write("BTC 로그가 없습니다.")
     with col2:
         st.subheader("ETH DCA")
-        if os.path.exists("eth_dca.log"):
-            with open("eth_dca.log", "r", encoding="utf-8") as f:
+        ETH_LOG = os.path.join(BASE_DIR, "eth_dca.log")
+        if os.path.exists(ETH_LOG):
+            with open(ETH_LOG, "r", encoding="utf-8") as f:
                 st.text("최근 ETH 로그")
                 st.code("".join(f.readlines()[-10:]))
         else:
@@ -126,7 +201,7 @@ if page == "📊 삼성바이오 실적 분석":
     show_samsung_page()
 elif page == "🔬 AI 가상 연구소 동향":
     show_ai_research_page()
-elif page == "📂 경력 모니터링 (비밀)":
+elif page == "📂 경력 모니터링":
     show_career_page()
 elif page == "🏫 국제중학교 입시설계":
     show_school_page()

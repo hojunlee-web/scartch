@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from google import genai
 import sys
+import time
 
 # 1. 환경 변수 로드
 load_dotenv()
@@ -91,6 +92,7 @@ def monitor_cycle():
         if job['url'] in seen_jobs: continue
         
         analysis = analyze_opportunity_with_ai(f"제목: {job['title']}\nURL: {job['url']}")
+        time.sleep(2)  # Quota 유지를 위한 지연
         
         if "SKIP" not in analysis:
             report_content.append(analysis)
@@ -101,6 +103,15 @@ def monitor_cycle():
         header = f"🚀 *[프리미엄 커리어 리포트]* ({datetime.now().strftime('%Y-%m-%d')})\n\n"
         full_report = header + "\n\n---\n\n".join(report_content)
         send_telegram(full_report)
+        
+        # 대시보드용 최신 리포트 저장
+        report_data = {
+            "date": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            "full_report": full_report,
+            "count": len(report_content)
+        }
+        with open("career_report_latest.json", "w", encoding="utf-8") as f:
+            json.dump(report_data, f, indent=4, ensure_ascii=False)
         
         # 확인된 공고 저장
         with open(DATA_FILE, 'w', encoding='utf-8') as f:

@@ -1,19 +1,21 @@
 import os
+import sys
 import time
 import requests
 import feedparser
+import json
 import google.generativeai as genai
 from datetime import datetime
 from dotenv import load_dotenv
 
 load_dotenv()
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 MY_PRIVATE_CHAT_ID = os.getenv("MY_PRIVATE_CHAT_ID")
 SCHOOL_GROUP_CHAT_ID = os.getenv("SCHOOL_GROUP_CHAT_ID")
 
-genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel('models/gemini-2.5-flash')
+genai.configure(api_key=GOOGLE_API_KEY)
+model = genai.GenerativeModel('gemini-2.0-flash')
 
 def post_log(message):
     now = datetime.now().strftime('[%Y-%m-%d %H:%M:%S]')
@@ -58,8 +60,20 @@ def main():
                 result = analyze_with_gemini(news_data)
                 report = f"🏫 [국제중학교 입시 2주 정기 브리핑]\n\n{result}"
                 send_telegram(report)
-                post_log("✅ 2주 단위 정기 보고 전송 완료")
+                
+                # 대시보드용 최신 리포트 저장
+                report_data = {
+                    "date": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                    "content": result
+                }
+                with open("school_report_latest.json", "w", encoding="utf-8") as f:
+                    json.dump(report_data, f, indent=4, ensure_ascii=False)
+                
+                post_log("✅ 2주 단위 정기 보고 전송 및 데이터 저장 완료")
             
+            if len(sys.argv) > 1 and sys.argv[1] == "--once":
+                break
+                
             # 2주(1209600초) 대기
             time.sleep(1209600)
         except Exception as e:
