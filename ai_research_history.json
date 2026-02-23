@@ -16,5 +16,41 @@
             }
         ],
         "analysis": "## 🔬 AI 가상 연구소 최신 동향 분석 (2025-2026)\n\n### 1. 가상 연구소(Virtual Lab)의 부상 (Nature 2025.07)\n- **핵심 내용**: PI, Scientist, Critic 역할을 하는 다중 AI 에이전트가 협업하여 신규 SARS-CoV-2 항체를 설계.\n- **혁신성**: AI가 제안한 92개의 항체 중 실제 유효한 결합력을 가진 항체 다수 확인.\n- **Slide 1: Overview** - 자율 연구 에이전트들의 단기 집중 연구 시스템 구축 및 실증.\n\n### 2. AI Co-Scientist의 유전자 기전 규명 (Cell 2025.11)\n- **핵심 내용**: 인간이 10년간 연구한 박테리아 유전자 이동 기전을 AI가 단 이틀 만에 규명.\n- **Slide 2: Methodology** - 가설 생성 및 검증 파이프라인이 인간의 편향을 넘어선 새로운 과학적 사실 발견에 기여.\n\n### 3. 인포그래픽 데이터 및 전략적 시사점\n- **에이전트 구조**: PI(전략) -> Scientist(실행) -> Critic(검토)의 선순환 구조.\n- **시사점**: 제약/바이오 R&D 프로세스가 'AI 중심 자율 연구소'로 빠르게 전환 중.\n"
+    },
+    {
+        "date": "2026-02-23",
+        "researches": [
+            {
+                "title": "The AI Scientist's Virtual Lab: Where Code Meets Discovery - Oreate AI",
+                "journal": "웹 문서",
+                "date": "최근",
+                "url": "https://www.oreateai.com/blog/the-ai-scientists-virtual-lab-where-code-meets-discovery/bfa4b9d4a54278014a6e97a99eab74bb"
+            },
+            {
+                "title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific ...",
+                "journal": "웹 문서",
+                "date": "최근",
+                "url": "https://www.emergentmind.com/videos/ai-scientist-automated-scientific-discovery-6bc7ae99"
+            },
+            {
+                "title": "How AI has changed drug discovery, and what's coming next",
+                "journal": "웹 문서",
+                "date": "최근",
+                "url": "https://www.labiotech.eu/resource/ai-drug-discovery/"
+            },
+            {
+                "title": "Explore the new BIOS API and how to add scientific intelligence to ...",
+                "journal": "웹 문서",
+                "date": "최근",
+                "url": "https://x.com/BioProtocol/status/2024212979500437866"
+            },
+            {
+                "title": "Biologists marvel at new AI drug discovery tool – but details are hidden",
+                "journal": "웹 문서",
+                "date": "최근",
+                "url": "https://www.linkedin.com/posts/isomorphic-labs_biologists-marvel-at-new-ai-drug-discovery-activity-7430293352627138560-OViA"
+            }
+        ],
+        "analysis": "AI 에러로 도출 실패: 404 This model models/gemini-2.0-flash is no longer available to new users. Please update your code to use a newer model for the latest features and improvements."
     }
 ]
