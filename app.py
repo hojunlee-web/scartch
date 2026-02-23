@@ -121,7 +121,7 @@ def show_ai_research_page():
     st.header(f"🖼️ 이번 주 핵심 인포그래픽 ({latest['date']})")
     if os.path.exists(IMAGE_FILE):
         st.image(IMAGE_FILE, use_container_width=True)
-    st.markdown(latest['analysis'])
+    st.markdown(latest['analysis'], unsafe_allow_html=True)
     
     st.divider()
     st.subheader("📋 NotebookLM 슬라이드/인포그래픽 제작용 원문 데이터")
@@ -160,11 +160,12 @@ def show_pharma_earnings_page():
     col1, col2 = st.columns([1, 1])
     with col1:
         st.subheader("📊 주요 동향 요약")
-        st.markdown(analysis.get("summary", "데이터 없음"))
+        st.markdown(analysis.get("summary", "데이터 없음"), unsafe_allow_html=True)
         
     with col2:
         st.subheader("💡 삼성바이오에피스 시사점 (자사 파이프라인 & ADC)")
-        st.info(analysis.get("implications", "데이터 없음"))
+        implications_html = f'<div style="background-color: #f0f2f6; padding: 1rem; border-radius: 0.5rem;">{analysis.get("implications", "데이터 없음")}</div>'
+        st.markdown(implications_html, unsafe_allow_html=True)
         
     st.divider()
     st.subheader("📋 NotebookLM 슬라이드 제작용 원문 데이터")
@@ -220,7 +221,7 @@ def show_career_page():
         with open(LATEST_REPORT, "r", encoding="utf-8") as f:
             report_data = json.load(f)
         st.info(f"📅 최근 분석 일시: {report_data['date']}")
-        st.markdown(report_data['full_report'])
+        st.markdown(report_data['full_report'], unsafe_allow_html=True)
     else:
         st.info("아직 생성된 커리어 리포트가 없습니다. 봇을 1회 실행해 주세요.")
     
@@ -240,7 +241,7 @@ def show_school_page():
         with open(LATEST_REPORT, "r", encoding="utf-8") as f:
             report_data = json.load(f)
         st.info(f"📅 최근 분석 일시: {report_data['date']}")
-        st.markdown(report_data['content'])
+        st.markdown(report_data['content'], unsafe_allow_html=True)
     
     st.divider()
     LOG_FILE = os.path.join(BASE_DIR, "school_bot.log")
