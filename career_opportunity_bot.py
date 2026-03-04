@@ -40,16 +40,16 @@ def send_telegram(message):
 def get_hibrain_notices():
     """하이브레인넷(교수/연구원 채용) 연동 가상 로직 - 실제 구현 시 크롤링 필요"""
     return [
-        {"title": "서울대학교 데이터사이언스 대학원 의료/바이오 AI 전임교원 초빙", "url": "https://hibrain.net/exam/1"},
-        {"title": "KAIST 바이오및뇌공학과 및 AI 대학원 공동 소속 부교수 모집", "url": "https://hibrain.net/exam/2"},
-        {"title": "A제약사 개발본부장(임원) 채용", "url": "https://hibrain.net/exam/3"} # 노이즈 테스트용
+        {"title": "서울대학교 데이터사이언스 대학원 의료/바이오 AI 전임교원 초빙", "url": "https://www.hibrain.net/"},
+        {"title": "KAIST 바이오및뇌공학과 및 AI 대학원 공동 소속 부교수 모집", "url": "https://www.hibrain.net/recruit/recruits?pid=1"},
+        {"title": "A제약사 개발본부장(임원) 채용", "url": "https://www.hibrain.net"} # 노이즈 테스트용
     ]
 
 def get_gates_foundation_jobs():
     """빌&멜린다 게이츠 재단 채용 사이트 모니터링 가상 로직"""
     return [
-        {"title": "Senior Program Officer, Global Health & AI Innovation (Japan/Singapore)", "url": "https://gatesfoundation.org/jobs/1"},
-        {"title": "Deputy Director, Bio-innovation Strategy", "url": "https://gatesfoundation.org/jobs/2"}
+        {"title": "Senior Program Officer, Global Health & AI Innovation (Japan/Singapore)", "url": "https://careers.gatesfoundation.org/"},
+        {"title": "Deputy Director, Bio-innovation Strategy", "url": "https://careers.gatesfoundation.org/search-results"}
     ]
 
 def analyze_opportunity_with_ai(job_info):
