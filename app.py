@@ -151,34 +151,6 @@ def show_ai_research_page():
     
     st.text_area("마우스로 전체 선택(Ctrl+A) 후 복사(Ctrl+C) 하세요:", value=notebooklm_text, height=300)
 
-    # 파워포인트 자동 생성 및 다운로드 기능 추가
-    st.divider()
-    st.subheader("📥 프레젠테이션 자동 생성")
-    st.markdown("위의 분석 데이터를 바탕으로 자동으로 PowerPoint 슬라이드를 생성해 드립니다.")
-    
-    if st.button("✨ PPTX 슬라이드 생성하기"):
-        with st.spinner('PowerPoint 파일을 만들고 있습니다...'):
-            try:
-                # generate_pptx.py의 제너레이터를 임포트하여 실행
-                from generate_pptx import PPTXGenerator
-                json_path = os.path.join(BASE_DIR, "ai_research_history.json")
-                generator = PPTXGenerator(json_path)
-                output_path = generator.generate(selected_item.get('date'))
-                
-                if output_path and os.path.exists(output_path):
-                    with open(output_path, "rb") as file:
-                        btn = st.download_button(
-                            label="⬇️ 완성된 프레젠테이션 다운로드",
-                            data=file,
-                            file_name=os.path.basename(output_path),
-                            mime="application/vnd.openxmlformats-officedocument.presentationml.presentation"
-                        )
-                    st.success("생성 완료! 위 버튼을 눌러 다운로드하세요.")
-                else:
-                    st.error("슬라이드 생성에 실패했습니다.")
-            except Exception as e:
-                st.error(f"생성 중 오류 발생: {e}")
-
 def show_pharma_earnings_page():
     st.title("🏢 글로벌 빅파마 실적 & 시사점 분석")
     st.markdown("글로벌 Top 10 제약사 및 유력 경쟁사의 최근 실적을 바탕으로 **삼성바이오에피스** 비즈니스에 대한 시사점을 AI가 자동으로 도출합니다.")
