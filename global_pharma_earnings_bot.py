@@ -18,7 +18,7 @@ TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 MY_PRIVATE_CHAT_ID = os.getenv("MY_PRIVATE_CHAT_ID")
 
 genai.configure(api_key=GOOGLE_API_KEY)
-model = genai.GenerativeModel('gemini-2.0-flash')
+model = genai.GenerativeModel('gemini-2.5-flash')
 
 LOG_FILE = "pharma_earnings_bot.log"
 REPORT_FILE = "pharma_earnings_report.json"

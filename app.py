@@ -21,9 +21,9 @@ st.sidebar.title("🌟 Hojun's Master Dashboard")
 # 개발자/관리자용 토글 추가 (쉽게 접근 가능하도록 항상 표시)
 dev_mode = st.sidebar.checkbox("🛠️ 관리자 모드 활성화", value=False)
 
-menu_options = ["📊 삼성바이오 실적 분석", "📚 신간 발간 소식 (인문/소설)"]
+menu_options = ["📊 삼성바이오 실적 분석", "🏢 글로벌 빅파마 실적 및 시사점"]
 if dev_mode:
-    menu_options.extend(["🏢 글로벌 빅파마 실적 및 시사점", "🔬 AI 가상 연구소 동향", "📂 경력 모니터링", "🏫 국제중학교 입시설계", "₿ 가상화폐 매매 현황"])
+    menu_options.extend(["🔬 AI 가상 연구소 동향", "📂 경력 모니터링", "🏫 국제중학교 입시설계", "₿ 가상화폐 매매 현황"])
 
 page = st.sidebar.selectbox("메뉴를 선택하세요", menu_options)
 
@@ -117,28 +117,67 @@ def show_ai_research_page():
         return
     with open(HISTORY_FILE, 'r', encoding='utf-8') as f:
         history = json.load(f)
-    latest = history[-1]
-    st.header(f"🖼️ 이번 주 핵심 인포그래픽 ({latest['date']})")
+        
+    if not history:
+        st.warning("데이터가 비어있습니다.")
+        return
+        
+    # 날짜 목록 생성 (최신이 위로 오게 역순 정렬, 중복 방지를 위해 인덱스 표기 포함)
+    date_options = [f"{item.get('date', '알 수 없는 날짜')} (목록 {len(history)-i})" for i, item in enumerate(reversed(history))]
+    selected_option = st.selectbox("📅 조회할 리포트 날짜를 선택하세요:", date_options)
+    
+    selected_index = len(history) - 1 - date_options.index(selected_option)
+    selected_item = history[selected_index]
+    
+    st.header(f"🖼️ 이번 주 핵심 인포그래픽 ({selected_item.get('date')})")
     if os.path.exists(IMAGE_FILE):
         st.image(IMAGE_FILE, use_container_width=True)
-    st.markdown(latest['analysis'], unsafe_allow_html=True)
+    st.markdown(selected_item.get('analysis', ''), unsafe_allow_html=True)
     
     st.divider()
     st.subheader("📋 NotebookLM 슬라이드/인포그래픽 제작용 원문 데이터")
     st.markdown("아래의 텍스트를 복사하여 Google NotebookLM에 붙여넣고 **'슬라이드 개요를 짜줘'** 또는 **'인포그래픽용 핵심 요약을 만들어줘'** 라고 명령하세요.")
     
     # NotebookLM을 위한 텍스트 취합
-    notebooklm_text = f"보고서 생성일: {latest['date']}\n\n"
+    notebooklm_text = f"보고서 생성일: {selected_item.get('date')}\n\n"
     notebooklm_text += "--- 1. 최신 연구 논문 리스트 ---\n"
-    for r in latest.get('researches', []):
+    for r in selected_item.get('researches', []):
         notebooklm_text += f"- 제목: {r.get('title')}\n"
         notebooklm_text += f"  저널: {r.get('journal')} ({r.get('date')})\n"
         notebooklm_text += f"  링크: {r.get('url')}\n"
     
     notebooklm_text += "\n--- 2. AI 전략 분석 요약 ---\n"
-    notebooklm_text += latest.get('analysis', '')
+    notebooklm_text += selected_item.get('analysis', '')
     
     st.text_area("마우스로 전체 선택(Ctrl+A) 후 복사(Ctrl+C) 하세요:", value=notebooklm_text, height=300)
+
+    # 파워포인트 자동 생성 및 다운로드 기능 추가
+    st.divider()
+    st.subheader("📥 프레젠테이션 자동 생성")
+    st.markdown("위의 분석 데이터를 바탕으로 자동으로 PowerPoint 슬라이드를 생성해 드립니다.")
+    
+    if st.button("✨ PPTX 슬라이드 생성하기"):
+        with st.spinner('PowerPoint 파일을 만들고 있습니다...'):
+            try:
+                # generate_pptx.py의 제너레이터를 임포트하여 실행
+                from generate_pptx import PPTXGenerator
+                json_path = os.path.join(BASE_DIR, "ai_research_history.json")
+                generator = PPTXGenerator(json_path)
+                output_path = generator.generate(selected_item.get('date'))
+                
+                if output_path and os.path.exists(output_path):
+                    with open(output_path, "rb") as file:
+                        btn = st.download_button(
+                            label="⬇️ 완성된 프레젠테이션 다운로드",
+                            data=file,
+                            file_name=os.path.basename(output_path),
+                            mime="application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                        )
+                    st.success("생성 완료! 위 버튼을 눌러 다운로드하세요.")
+                else:
+                    st.error("슬라이드 생성에 실패했습니다.")
+            except Exception as e:
+                st.error(f"생성 중 오류 발생: {e}")
 
 def show_pharma_earnings_page():
     st.title("🏢 글로벌 빅파마 실적 & 시사점 분석")
@@ -176,41 +215,6 @@ def show_pharma_earnings_page():
     notebooklm_text += f"--- 2. 삼성바이오에피스 시사점 ---\n{analysis.get('implications', '')}\n"
     
     st.text_area("마우스로 전체 선택(Ctrl+A) 후 복사(Ctrl+C) 하세요:", value=notebooklm_text, height=200)
-
-def show_books_page():
-    st.title("📚 작가별 신간 발간 신호 모니터링")
-    st.markdown("관심 작가 5인의 최신 도서 출간 소식을 AI가 매일 자동 분석하여 알려줍니다.")
-    
-    REPORT_FILE = os.path.join(BASE_DIR, "author_books_report.json")
-    if not os.path.exists(REPORT_FILE):
-        st.info("아직 수집된 도서 모니터링 데이터가 없습니다.")
-        return
-        
-    with open(REPORT_FILE, "r", encoding="utf-8") as f:
-        data = json.load(f)
-        
-    st.caption(f"🔄 마지막 업데이트: {data.get('date', '알 수 없음')}")
-    st.divider()
-    
-    # 5명의 작가를 2행(3개, 2개) 또는 3컬럼 등으로 배치
-    authors_data = data.get("authors", {})
-    cols = st.columns(3)
-    
-    for i, (author, info) in enumerate(authors_data.items()):
-        col = cols[i % 3]
-        with col:
-            st.subheader(f"✒️ {author}")
-            status = info.get("status", "알 수 없음")
-            if "신간 출시" in status:
-                st.success(f"**상태:** {status}")
-            else:
-                st.write(f"**상태:** {status}")
-            
-            st.write(f"**최근 포착 도서:** {info.get('book_title', '-')}")
-            
-            with st.expander("AI 분석 요약"):
-                st.write(info.get("summary", "내용 없음"))
-            st.write("---")
 
 def show_career_page():
     st.title("📂 개인 경력 관리")
@@ -280,8 +284,6 @@ if page == "📊 삼성바이오 실적 분석":
     show_samsung_page()
 elif page == "🔬 AI 가상 연구소 동향":
     show_ai_research_page()
-elif page == "📚 신간 발간 소식 (인문/소설)":
-    show_books_page()
 elif page == "🏢 글로벌 빅파마 실적 및 시사점":
     show_pharma_earnings_page()
 elif page == "📂 경력 모니터링":
