@@ -286,10 +286,6 @@ elif page == "🏢 글로벌 빅파마 실적 및 시사점":
 elif page == "📂 경력 모니터링":
     show_career_page()
 elif page == "🏫 국제중학교 입시설계":
-elif page == "School Admission Plan":
-    # (Leaving original logic alone, just adding the case below)
-    pass
-elif page == "🏫 국제중학교 입시설계":
     show_school_page()
 elif page == "₿ 가상화폐 매매 현황":
     show_crypto_page()
