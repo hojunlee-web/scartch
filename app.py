@@ -21,7 +21,7 @@ st.sidebar.title("🌟 Hojun's Master Dashboard")
 # 개발자/관리자용 토글 추가 (쉽게 접근 가능하도록 항상 표시)
 dev_mode = st.sidebar.checkbox("🛠️ 관리자 모드 활성화", value=False)
 
-menu_options = ["📊 삼성바이오 실적 분석", "🏢 글로벌 빅파마 실적 및 시사점"]
+menu_options = ["📊 삼성바이오 실적 분석", "🏢 글로벌 빅파마 실적 및 시사점", "💊 FDA 이벤트 트래커"]
 if dev_mode:
     menu_options.extend(["🔬 AI 가상 연구소 동향", "📂 경력 모니터링", "🏫 국제중학교 입시설계", "₿ 가상화폐 매매 현황"])
 
@@ -251,6 +251,31 @@ def show_crypto_page():
         else:
             st.write("ETH 로그가 없습니다.")
 
+def show_fda_tracker_page():
+    from config import REPORT_PATH
+    from data_fetcher import generate_report
+
+    st.title("💊 FDA 이벤트 트래커: 바이오의약품 및 바이오시밀러")
+
+    st.markdown("""
+    이 애플리케이션은 주요 제약사의 PDUFA 대상 조치일, 자문위원회(AdCom) 회의, 심사보완요구서(CRL) 발행, 제품 승인 일정을 추적합니다.
+    """)
+
+    if st.button("최신 데이터 가져오기"):
+        with st.spinner("웹에서 최신 FDA 이벤트를 검색 중입니다..."):
+            try:
+                generate_report()
+                st.success("보고서 업데이트를 완료했습니다!")
+            except Exception as e:
+                st.error(f"데이터를 가져오는 중 오류 발생: {e}")
+
+    if os.path.exists(REPORT_PATH):
+        with open(REPORT_PATH, "r", encoding="utf-8") as f:
+            content = f.read()
+        st.markdown(content)
+    else:
+        st.info("아직 생성된 보고서가 없습니다. '최신 데이터 가져오기'를 클릭하여 생성해주세요.")
+
 # --- 3. 로직 실행 ---
 if page == "📊 삼성바이오 실적 분석":
     show_samsung_page()
@@ -261,9 +286,15 @@ elif page == "🏢 글로벌 빅파마 실적 및 시사점":
 elif page == "📂 경력 모니터링":
     show_career_page()
 elif page == "🏫 국제중학교 입시설계":
+elif page == "School Admission Plan":
+    # (Leaving original logic alone, just adding the case below)
+    pass
+elif page == "🏫 국제중학교 입시설계":
     show_school_page()
 elif page == "₿ 가상화폐 매매 현황":
     show_crypto_page()
+elif page == "💊 FDA 이벤트 트래커":
+    show_fda_tracker_page()
 
 st.sidebar.markdown("---")
 st.sidebar.caption(f"Last updated: {datetime.now().strftime('%Y-%m-%d')}")

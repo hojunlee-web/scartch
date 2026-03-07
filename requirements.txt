@@ -5,3 +5,7 @@ google-genai
 python-dotenv
 requests
 matplotlib
+duckduckgo-search
+python-telegram-bot
+schedule
+pytz
