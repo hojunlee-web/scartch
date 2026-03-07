@@ -1,6 +1,6 @@
 import os
 import requests
-from bs4 import BeautifulSoup
+from duckduckgo_search import DDGS
 from datetime import datetime
 from dotenv import load_dotenv
 from google import genai
@@ -20,25 +20,22 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 REPORT_PATH = os.path.join(BASE_DIR, "apt_report_latest.md")
 
 def get_macro_indicators():
-    query = "한국은행 기준금리 주택담보대출 금리 전망"
-    url = f"https://search.naver.com/search.naver?where=news&query={query}"
-    headers = {"User-Agent": "Mozilla/5.0"}
+    query = "한국은행 금리 부동산 매매 동향"
     try:
-        res = requests.get(url, headers=headers, timeout=10)
-        soup = BeautifulSoup(res.text, 'html.parser')
-        headlines = [item.get_text() for item in soup.select(".news_tit")[:2]]
+        results = DDGS().news(keywords=query, max_results=2)
+        if not results: return "데이터 없음"
+        # Convert generator to list and extract titles
+        headlines = [item.get('title', '') for item in list(results)]
         return "\n".join(headlines) if headlines else "데이터 없음"
     except Exception as e:
         return f"거시 지표 수집 오류: {e}"
 
 def get_raw_subscription_data():
-    query = "서울 아파트 분양 공고 시세 차익 청약 가점"
-    url = f"https://search.naver.com/search.naver?where=news&query={query}"
-    headers = {"User-Agent": "Mozilla/5.0"}
+    query = "서울 아파트 분양 공고 시세 차익 청약"
     try:
-        res = requests.get(url, headers=headers, timeout=10)
-        soup = BeautifulSoup(res.text, 'html.parser')
-        contents = [item.get_text() for item in soup.select(".news_dsc")[:2]]
+        results = DDGS().news(keywords=query, max_results=2)
+        if not results: return "분양 데이터 없음"
+        contents = [item.get('title', '') + " - " + item.get('body', '') for item in list(results)]
         return "\n".join(contents) if contents else "분양 데이터 없음"
     except Exception as e:
         return f"분양 데이터 수집 오류: {e}"
@@ -46,24 +43,23 @@ def get_raw_subscription_data():
 def get_specific_apt_news():
     """특정 관심 단지 뉴스 검색"""
     apts = ["디에이치 켄트로나인", "방배 포레스트 자이", "디에이치 클래스트", "한남3구역"]
-    results = {}
-    headers = {"User-Agent": "Mozilla/5.0"}
+    results_dict = {}
     
     for apt in apts:
         query = f"{apt} 분양"
-        url = f"https://search.naver.com/search.naver?where=news&query={query}"
         try:
-            res = requests.get(url, headers=headers, timeout=10)
-            soup = BeautifulSoup(res.text, 'html.parser')
-            # Extract top 2 news headlines
-            headlines = [item.get_text() for item in soup.select(".news_tit")[:2]]
-            results[apt] = "\n".join(headlines) if headlines else "최신 뉴스 없음"
+            results = DDGS().news(keywords=query, max_results=2)
+            if results:
+                headlines = [item.get('title', '') for item in list(results)]
+                results_dict[apt] = "\n".join(headlines) if headlines else "최신 뉴스 없음"
+            else:
+                results_dict[apt] = "최신 뉴스 없음"
         except Exception as e:
-            results[apt] = f"뉴스 검색 실패: {e}"
+            results_dict[apt] = f"뉴스 검색 실패: {e}"
             
     # Format results
     formatted = []
-    for apt, news in results.items():
+    for apt, news in results_dict.items():
         formatted.append(f"[{apt}]\n{news}")
     return "\n\n".join(formatted)
 

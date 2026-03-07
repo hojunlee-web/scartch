@@ -3,16 +3,21 @@
 ### 🔴 이번 주 (향후 7일 이내)
 | 날짜 | 기업 | 약물명 | 적응증 | 이벤트 유형 | 비고 |
 |------|---------|-----------|------------|------------|-------|
-| 2025-11-19 | Regeneron | Unknown | Unknown | Approval | Regeneron Gets FDA Approval for Eye Treatment Eyle... |
-| 2025-10-28 | Regeneron | Unknown | Unknown | Update | Regeneron reports another manufacturing-related re... |
-| 2025-11-20 | Regeneron | Unknown | Unknown | Update | REGN Gets EC Nod for Libtayo Label Expansion, FDA ... |
-| 2025-10-13 | Regeneron | Unknown | Unknown | Update | Novo plant hit with FDA's most serious inspection ... |
-| 2026-01-30 | Regeneron | Unknown | Unknown | Approval | Regeneron outlines 18 new phase III studies and ex... |
-| 2025-12-12 | Amgen | Unknown | Unknown | Update | Here's how AMGN benefits from FDA nod to Uplizna i... |
-| 2025-12-12 | Amgen | Unknown | Unknown | Update | Amgen's Uplizna breaks into crowded myasthenia gra... |
-| 2026-02-04 | Amgen | Unknown | Unknown | Update | Amgen resists FDA request to pull rare disease dru... |
-| 2025-12-12 | Amgen | Unknown | Unknown | Update | FDA Approves Amgen's Drug For Rare Muscle Disorder |
-| 2025-11-20 | Amgen | Unknown | Unknown | Approval | FDA Grants Full Approval To Amgen's Lung Cancer Dr... |
+| 2025-11-19 | Regeneron | 미정 | 미정 | 승인 | Regeneron Gets FDA Approval for Eye Treatment Eylea |
+| 2025-11-19 | Regeneron | 미정 | 미정 | IND 제출 | EYLEA HD® (aflibercept) Injection 8 mg Approved by FDA for the Treatment of Macular Edema Following Retinal Vein Occlusion (RVO) and for Monthly Dosing Across Approved Indications |
+| 2025-11-20 | Regeneron | 미정 | 미정 | 업데이트 | Regeneron wins 2 Eylea nods, ramping up competition with Roche |
+| 2025-11-20 | Regeneron | 미정 | 미정 | 업데이트 | REGN Gets EC Nod for Libtayo Label Expansion, FDA Clears Monthly Eylea HD |
+| 2026-01-30 | Regeneron | 미정 | 미정 | 승인 | Regeneron outlines 18 new Phase III studies and expects four FDA approvals in 2026 while advancing EYLEA HD and DUPIXENT growth |
+| 2025-12-12 | Amgen | 미정 | 미정 | 업데이트 | Here's how AMGN benefits from FDA nod to Uplizna in myasthenia gravis |
+| 2025-12-12 | Amgen | 미정 | 미정 | 업데이트 | Amgen's Uplizna breaks into crowded myasthenia gravis market with FDA nod |
+| 2026-02-04 | Amgen | 미정 | 미정 | 업데이트 | Amgen resists FDA request to pull rare disease drug Tavneos from the market |
+| 2025-12-12 | Amgen | 미정 | 미정 | 업데이트 | FDA Approves Amgen's Drug For Rare Muscle Disorder |
+| 2025-11-20 | Amgen | 미정 | 미정 | 승인 | FDA Grants Full Approval To Amgen's Lung Cancer Drug IMDELLTRA |
+| 2026-02-05 | Generate Biomedicines | 미정 | 미정 | 업데이트 | Generate:Biomedicines eyes public markets as AI drug advances to late-stage trials |
+| 2026-01-09 | Generate Biomedicines | 미정 | 미정 | PDUFA | Aquestive Therapeutics: Looking For The PDUFA Run-Up |
+| 2025-12-26 | Generate Biomedicines | 미정 | 미정 | 승인 | Rocket Pharmaceuticals: Deep Dislocation Offers Asymmetric Upside On LAD-I Approval And Amended Danon Program |
+| 2025-12-22 | Samsung Biologics | 미정 | 미정 | 업데이트 | Samsung Biologics Pays $280M For U.S. Drug Manufacturing Facility |
+| 2025-12-22 | Samsung Biologics | 미정 | 미정 | 업데이트 | Samsung Biologics to buy US drug production facility from GSK for $280 million |
 
 
 ### 🟡 향후 30일
