@@ -36,18 +36,18 @@ def classify_events(news_list):
         date = n.get('date', 'Unknown Date')[:10]
         
         # Determine event type
-        event_type = "Update"
+        event_type = "업데이트"
         title_lower = title.lower()
-        if "approval" in title_lower:
-            event_type = "Approval"
+        if "approval" in title_lower or "승인" in title_lower:
+            event_type = "승인"
         elif "pdufa" in title_lower:
             event_type = "PDUFA"
         elif "complete response letter" in title_lower or "crl" in title_lower:
-            event_type = "CRL"
+            event_type = "CRL (심사보완요구)"
         elif "advisory committee" in title_lower or "adcom" in title_lower:
-            event_type = "AdCom"
+            event_type = "자문위원회"
         elif "ind" in title_lower:
-            event_type = "IND Filing"
+            event_type = "IND 제출"
 
         # Simplified to "This Week" since it's recent news.
         this_week.append({
@@ -93,9 +93,9 @@ def generate_report():
     if not all_this_week:
          report_lines.append("| - | - | - | - | 확인된 단기 이벤트 없음 | - |")
     else:
-        for comp, item in all_this_week[:10]: # Limit to avoid massive tables
-            title_trunc = item['title'][:50] + "..." if len(item['title']) > 50 else item['title']
-            report_lines.append(f"| {item['date']} | {comp} | Unknown | Unknown | {item['event_type']} | {title_trunc} |")
+        for comp, item in all_this_week[:15]: # Limit to avoid massive tables
+            # 소식이 중간에 잘리는 현상 방지를 위해 truncation 제거
+            report_lines.append(f"| {item['date']} | {comp} | 미정 | 미정 | {item['event_type']} | {item['title']} |")
     report_lines.append("\n")
 
     # Compile 30 Days
