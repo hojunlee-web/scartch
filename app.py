@@ -21,7 +21,7 @@ st.sidebar.title("🌟 Hojun's Master Dashboard")
 # 개발자/관리자용 토글 추가 (쉽게 접근 가능하도록 항상 표시)
 dev_mode = st.sidebar.checkbox("🛠️ 관리자 모드 활성화", value=False)
 
-menu_options = ["📊 삼성바이오 실적 분석", "🏢 글로벌 빅파마 실적 및 시사점", "💊 FDA 이벤트 트래커"]
+menu_options = ["📊 삼성바이오 실적 분석", "🏢 글로벌 빅파마 실적 및 시사점", "💊 FDA 이벤트 트래커", "🏢 서울 아파트 청약 리포트"]
 if dev_mode:
     menu_options.extend(["🔬 AI 가상 연구소 동향", "📂 경력 모니터링", "🏫 국제중학교 입시설계", "₿ 가상화폐 매매 현황"])
 
@@ -276,6 +276,27 @@ def show_fda_tracker_page():
     else:
         st.info("아직 생성된 보고서가 없습니다. '최신 데이터 가져오기'를 클릭하여 생성해주세요.")
 
+def show_apt_report_page():
+    from seoul_apt_bot import generate_apt_report, REPORT_PATH
+    
+    st.title("🏢 서울 아파트 AI 청약 리포트 (1주택자 관점)")
+    st.markdown("매주 서울 아파트 주요 분양 단지와 네이버 뉴스 거시경제 지표를 스크래핑한 뒤, Gemini AI를 통해 1주택 처분 조건부 당첨 전략을 분석합니다.")
+    
+    if st.button("지금 AI 리포트 생성하기"):
+        with st.spinner("AI가 최신 경제 지표와 분양 뉴스를 수집하고 분석 중입니다..."):
+            try:
+                generate_apt_report()
+                st.success("리포트가 성공적으로 생성되었습니다!")
+            except Exception as e:
+                st.error(f"오류 발생: {e}")
+                
+    if os.path.exists(REPORT_PATH):
+        with open(REPORT_PATH, "r", encoding="utf-8") as f:
+            content = f.read()
+        st.markdown(content)
+    else:
+        st.info("저장된 리포트가 없습니다. 위 버튼을 눌러 생성해주세요.")
+
 # --- 3. 로직 실행 ---
 if page == "📊 삼성바이오 실적 분석":
     show_samsung_page()
@@ -291,6 +312,8 @@ elif page == "₿ 가상화폐 매매 현황":
     show_crypto_page()
 elif page == "💊 FDA 이벤트 트래커":
     show_fda_tracker_page()
+elif page == "🏢 서울 아파트 청약 리포트":
+    show_apt_report_page()
 
 st.sidebar.markdown("---")
 st.sidebar.caption(f"Last updated: {datetime.now().strftime('%Y-%m-%d')}")
