@@ -43,7 +43,31 @@ def get_raw_subscription_data():
     except Exception as e:
         return f"분양 데이터 수집 오류: {e}"
 
-def analyze_subscription_with_ai(raw_data, macro_data):
+def get_specific_apt_news():
+    """특정 관심 단지 뉴스 검색"""
+    apts = ["디에이치 켄트로나인", "방배 포레스트 자이", "디에이치 클래스트", "한남3구역"]
+    results = {}
+    headers = {"User-Agent": "Mozilla/5.0"}
+    
+    for apt in apts:
+        query = f"{apt} 분양"
+        url = f"https://search.naver.com/search.naver?where=news&query={query}"
+        try:
+            res = requests.get(url, headers=headers, timeout=10)
+            soup = BeautifulSoup(res.text, 'html.parser')
+            # Extract top 2 news headlines
+            headlines = [item.get_text() for item in soup.select(".news_tit")[:2]]
+            results[apt] = "\n".join(headlines) if headlines else "최신 뉴스 없음"
+        except Exception as e:
+            results[apt] = f"뉴스 검색 실패: {e}"
+            
+    # Format results
+    formatted = []
+    for apt, news in results.items():
+        formatted.append(f"[{apt}]\n{news}")
+    return "\n\n".join(formatted)
+
+def analyze_subscription_with_ai(raw_data, macro_data, specific_apt_data):
     if not client:
         return "❌ 구글 API 키(GOOGLE_API_KEY)가 설정되지 않았습니다."
         
@@ -51,8 +75,10 @@ def analyze_subscription_with_ai(raw_data, macro_data):
     당신은 부동산 전문 금융 분석가입니다. 아래 데이터를 바탕으로 '서울 아파트 분양 리포트'를 단계별로 작성하십시오.
     
     [입력 데이터]
-    - 분양 관련 뉴스: {raw_data}
+    - 전반적인 분양 관련 뉴스: {raw_data}
     - 거시 경제 지표: {macro_data}
+    - ✨ 특정 관심 단지 최신 뉴스: 
+    {specific_apt_data}
     
     [분석 지침]
     1. 비유적 표현을 완전히 배제하고, 수치와 사실에 근거하여 단계별(Step-by-Step)로 기술하십시오.
@@ -60,10 +86,12 @@ def analyze_subscription_with_ai(raw_data, macro_data):
     3. 재무 지표, 뉴스 테마, 지분 관계, 안전 마진(Safety Margin)을 종합적으로 고려하십시오.
     
     [리포트 구성]
-    1단계: 서울 주요 분양 예정지 및 예상 시세 차익 분석
-    2단계: 금리 추이가 청약 가점에 미치는 영향 평가
-    3단계: 1주택자 맞춤형 청약 전략 및 커트라인 예측
-    4단계: 종합 투자 등급 및 기회 요인 정리
+    [리포트 구성]
+    1단계: 특정 관심 단지(디에이치 켄트로나인, 방배 포레스트 자이, 디에이치 클래스트, 한남3구역) 최신 동향 및 핵심 요약
+    2단계: 서울 주요 분양 예정지 및 예상 시세 차익 분석
+    3단계: 금리 추이가 청약 가점에 미치는 영향 평가
+    4단계: 1주택자 맞춤형 청약 전략 및 커트라인 예측
+    5단계: 종합 투자 등급 및 기회 요인 정리
     """
     try:
         response = client.models.generate_content(
@@ -77,7 +105,8 @@ def analyze_subscription_with_ai(raw_data, macro_data):
 def generate_apt_report():
     macro = get_macro_indicators()
     raw = get_raw_subscription_data()
-    report = analyze_subscription_with_ai(raw, macro)
+    specific_apts = get_specific_apt_news()
+    report = analyze_subscription_with_ai(raw, macro, specific_apts)
     
     now_str = datetime.now().strftime('%Y-%m-%d %H:%M')
     full_report_text = f"## 🏢 서울 분양 자율 분석 리포트 - {now_str}\n\n{report}"
