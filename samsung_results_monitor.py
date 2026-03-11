@@ -94,7 +94,7 @@ def extract_financial_data(report_nm, report_url):
     예시 반환: {{"period": "2025 4Q", "revenue": 1285.7, "op_income": 528.3}}
     """
     try:
-        response = client.models.generate_content(model='models/gemini-2.0-flash', contents=prompt)
+        response = client.models.generate_content(model='models/gemini-2.5-flash', contents=prompt)
         text = response.text.strip()
         if "NONE" in text: return None
         # JSON 부분만 추출 (Gemini가 마크다운을 포함할 수 있음)
