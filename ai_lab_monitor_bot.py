@@ -167,7 +167,7 @@ def push_to_github():
         if status.stdout.strip():
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             subprocess.run(["git", "commit", "-m", f"Auto-update AI Lab research history: {timestamp}"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            subprocess.run(["git", "push", "origin", "main:master"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(["git", "push", "origin", "master"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             log_message("GitHub 업로드 성공! 대시보드가 갱신됩니다.")
         else:
             log_message("새로운 변경 사항이 없어 GitHub 업로드를 건너뜁니다.")
