@@ -23,7 +23,7 @@ dev_mode = st.sidebar.checkbox("🛠️ 관리자 모드 활성화", value=False
 
 menu_options = ["📊 삼성바이오 실적 분석", "🏢 글로벌 빅파마 실적 및 시사점"]
 if dev_mode:
-    menu_options.extend(["🔬 AI 가상 연구소 동향", "📂 경력 모니터링", "🏫 국제중학교 입시설계", "₿ 가상화폐 매매 현황", "🏢 서울 아파트 청약 리포트"])
+    menu_options.extend(["🔬 AI 가상 연구소 동향", "📂 경력 모니터링", "🏫 국제중학교 입시설계", "₿ 가상화폐 매매 현황"])
 
 page = st.sidebar.selectbox("메뉴를 선택하세요", menu_options)
 
@@ -264,18 +264,7 @@ elif page == "🏫 국제중학교 입시설계":
     show_school_page()
 elif page == "₿ 가상화폐 매매 현황":
     show_crypto_page()
-elif page == "🏢 서울 아파트 청약 리포트":
-    st.title("🏢 서울 아파트 분양 자율 분석 리포트")
-    st.success("🔓 최근 생성된 서울 아파트 분양 AI 보고서입니다.")
-    st.info("실제 텔레그램으로 전송된 가장 최근의 분석 결과를 보여줍니다.")
-    try:
-        from seoul_apt_bot import get_raw_subscription_data, get_macro_indicators, analyze_subscription_with_ai
-        macro = get_macro_indicators()
-        raw = get_raw_subscription_data()
-        report = analyze_subscription_with_ai(raw, macro)
-        st.markdown(report, unsafe_allow_html=True)
-    except Exception as e:
-        st.error(f"리포트 불러오기 실패: {e}")
+
 
 st.sidebar.markdown("---")
 st.sidebar.caption(f"Last updated: {datetime.now().strftime('%Y-%m-%d')}")

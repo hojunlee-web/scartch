@@ -11,8 +11,12 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 import sys
 
-# 환경 변수 로드
-load_dotenv()
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+env_path = os.path.join(BASE_DIR, '.env')
+if os.path.exists(env_path):
+    load_dotenv(env_path)
+else:
+    load_dotenv()
 
 # API 설정
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
@@ -29,9 +33,9 @@ EMAIL_RECEIVER = "hojunlee78@gmail.com"
 genai.configure(api_key=GOOGLE_API_KEY)
 model = genai.GenerativeModel('gemini-2.5-flash')
 
-DATA_FILE = "ai_research_data.json"
-HISTORY_FILE = "ai_research_history.json"
-LOG_FILE = "ai_lab_bot.log"
+DATA_FILE = os.path.join(BASE_DIR, "ai_research_data.json")
+HISTORY_FILE = os.path.join(BASE_DIR, "ai_research_history.json")
+LOG_FILE = os.path.join(BASE_DIR, "ai_lab_bot.log")
 
 def log_message(msg):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -80,6 +84,10 @@ def send_email(subject, body):
         log_message(f"이메일 발송 실패: {e}")
 
 def fetch_ai_research_news():
+    if not SERPER_API_KEY:
+        log_message("에러: SERPER_API_KEY가 존재하지 않습니다. .env 파일을 확인해 주세요.")
+        return None
+        
     log_message("Serper API로 AI 가상 연구소 관련 논문/기사 검색 시작...")
     url = "https://google.serper.dev/search"
     query = '("AI Scientist" OR "Virtual Lab" OR "LLM Biology" OR "AI drug discovery")'
@@ -183,7 +191,23 @@ def monitor_cycle():
     
     # 이메일 전송 (텔레그램과 동일한 내용, 마크다운 텍스트 기반)
     email_subject = f"🔬 [주간 리포트] 글로벌 AI 가상 연구소 동향 ({datetime.now().strftime('%Y-%m-%d')})"
-    send_email(email_subject, processed_data['analysis'])
+    
+    # NotebookLM을 위한 텍스트 취합
+    notebooklm_text = "\n\n<hr>\n<h3>📋 NotebookLM 슬라이드/인포그래픽 제작용 원문 데이터</h3>\n"
+    notebooklm_text += f"<p>보고서 생성일: {datetime.now().strftime('%Y-%m-%d')}</p>\n"
+    notebooklm_text += "<p><b>--- 1. 최신 연구 논문 리스트 ---</b></p>\n<ul>\n"
+    for r in processed_data.get('researches', []):
+        notebooklm_text += f"<li>제목: {r.get('title')}<br>"
+        notebooklm_text += f"저널: {r.get('journal')} ({r.get('date')})<br>"
+        notebooklm_text += f"링크: <a href='{r.get('url')}'>{r.get('url')}</a></li>\n"
+    notebooklm_text += "</ul>\n"
+    
+    notebooklm_text += "<p><b>--- 2. AI 전략 분석 요약 ---</b></p>\n"
+    notebooklm_text += f"<div>{processed_data.get('analysis', '').replace(chr(10), '<br>')}</div>\n"
+    
+    email_body = processed_data['analysis'] + "\n\n" + "[이메일 원문은 아래 HTML 버전을 참고하세요]" + notebooklm_text
+    
+    send_email(email_subject, email_body)
     
     # 히스토리 로드 및 업데이트 (대시보드 표시용)
     if os.path.exists(HISTORY_FILE):
