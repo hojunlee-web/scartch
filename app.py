@@ -21,9 +21,9 @@ st.sidebar.title("🌟 Hojun's Master Dashboard")
 # 개발자/관리자용 토글 추가 (쉽게 접근 가능하도록 항상 표시)
 dev_mode = st.sidebar.checkbox("🛠️ 관리자 모드 활성화", value=False)
 
-menu_options = ["📊 삼성바이오 실적 분석", "🏢 글로벌 빅파마 실적 및 시사점"]
+menu_options = ["📊 삼성바이오 실적 분석", "🏢 글로벌 빅파마 실적 및 시사점", "🔬 AI 가상 연구소 동향", "🏫 국제중학교 입시설계"]
 if dev_mode:
-    menu_options.extend(["🔬 AI 가상 연구소 동향", "📂 경력 모니터링", "🏫 국제중학교 입시설계", "₿ 가상화폐 매매 현황"])
+    menu_options.extend(["📂 경력 모니터링", "₿ 가상화폐 매매 현황"])
 
 page = st.sidebar.selectbox("메뉴를 선택하세요", menu_options)
 
@@ -31,7 +31,7 @@ st.sidebar.markdown("---")
 st.sidebar.subheader("🌐 친구들에게 공유하기")
 st.sidebar.info("""
 1. 현재 보고 계신 웹 브라우저의 **URL 주소를 복사**하여 보내주세요.
-2. 친구들은 '실적 분석'과 'AI 연구 동향'만 볼 수 있습니다.
+2. 친구들은 '실적 분석', 'AI 연구 동향', '국제중 입시설계' 메뉴를 볼 수 있습니다.
 """)
 
 # --- 2. 페이지별 함수 정의 ---
