@@ -241,30 +241,39 @@ def show_crypto_page():
         try:
             upbit = pyupbit.Upbit(upbit_access, upbit_secret)
             balances = upbit.get_balances()
-            krw = next((item for item in balances if item['currency'] == 'KRW'), None)
-            btc = next((item for item in balances if item['currency'] == 'BTC'), None)
-            eth = next((item for item in balances if item['currency'] == 'ETH'), None)
             
-            st.subheader("💼 실시간 업비트 계좌 현황")
-            cols = st.columns(3)
-            with cols[0]:
-                st.metric("보유 예수금 (KRW)", f"{int(float(krw['balance'])):,} 원" if krw else "0 원")
-            with cols[1]:
-                if btc:
-                    btc_current = pyupbit.get_current_price("KRW-BTC")
-                    btc_buy = float(btc['avg_buy_price'])
-                    btc_profit = ((btc_current - btc_buy) / btc_buy) * 100 if btc_buy else 0
-                    st.metric("비트코인 (BTC)", f"{float(btc['balance']):.4f} BTC", f"{btc_profit:.2f}% 수익")
-                else:
-                    st.metric("비트코인 (BTC)", "보유 안함")
-            with cols[2]:
-                if eth:
-                    eth_current = pyupbit.get_current_price("KRW-ETH")
-                    eth_buy = float(eth['avg_buy_price'])
-                    eth_profit = ((eth_current - eth_buy) / eth_buy) * 100 if eth_buy else 0
-                    st.metric("이더리움 (ETH)", f"{float(eth['balance']):.4f} ETH", f"{eth_profit:.2f}% 수익")
-                else:
-                    st.metric("이더리움 (ETH)", "보유 안함")
+            if isinstance(balances, dict) and 'error' in balances:
+                error_msg = balances['error'].get('message', 'API 키 불일치 또는 IP 허용 문제')
+                st.error(f"⚠️ 업비트 계좌 연동 실패: {error_msg}")
+                st.info("API 키 발급 시 '특정 IP에서만 실행' 옵션을 해제하셨는지, 또는 키를 정확히 입력하셨는지 확인해 주세요.")
+            elif isinstance(balances, list):
+                krw = next((item for item in balances if item['currency'] == 'KRW'), None)
+                btc = next((item for item in balances if item['currency'] == 'BTC'), None)
+                eth = next((item for item in balances if item['currency'] == 'ETH'), None)
+                
+                st.subheader("💼 실시간 업비트 계좌 현황")
+                cols = st.columns(3)
+                with cols[0]:
+                    st.metric("보유 예수금 (KRW)", f"{int(float(krw['balance'])):,} 원" if krw else "0 원")
+                with cols[1]:
+                    if btc:
+                        btc_current = pyupbit.get_current_price("KRW-BTC")
+                        btc_buy = float(btc['avg_buy_price'])
+                        btc_profit = ((btc_current - btc_buy) / btc_buy) * 100 if btc_buy else 0
+                        st.metric("비트코인 (BTC)", f"{float(btc['balance']):.4f} BTC", f"{btc_profit:.2f}% 수익")
+                    else:
+                        st.metric("비트코인 (BTC)", "보유 안함")
+                with cols[2]:
+                    if eth:
+                        eth_current = pyupbit.get_current_price("KRW-ETH")
+                        eth_buy = float(eth['avg_buy_price'])
+                        eth_profit = ((eth_current - eth_buy) / eth_buy) * 100 if eth_buy else 0
+                        st.metric("이더리움 (ETH)", f"{float(eth['balance']):.4f} ETH", f"{eth_profit:.2f}% 수익")
+                    else:
+                        st.metric("이더리움 (ETH)", "보유 안함")
+            else:
+                st.warning("업비트 응답을 처리할 수 없습니다. 잠시 후 다시 시도해 주세요.")
+                
             st.divider()
         except Exception as e:
             st.warning(f"업비트 API 연동 중 오류 발생: {e}")
