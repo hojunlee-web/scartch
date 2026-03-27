@@ -175,8 +175,7 @@ def show_pharma_earnings_page():
         
     with col2:
         st.subheader("💡 삼성바이오에피스 시사점 (자사 파이프라인 & ADC)")
-        implications_html = f'<div style="background-color: #f0f2f6; padding: 1rem; border-radius: 0.5rem;">{analysis.get("implications", "데이터 없음")}</div>'
-        st.markdown(implications_html, unsafe_allow_html=True)
+        st.info(analysis.get("implications", "데이터 없음"))
         
     st.divider()
     st.subheader("📋 NotebookLM 슬라이드 제작용 원문 데이터")
