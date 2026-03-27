@@ -3,6 +3,7 @@ import time
 import requests
 import pyupbit
 import google.generativeai as genai
+import subprocess
 from datetime import datetime
 from dotenv import load_dotenv
 
@@ -38,6 +39,24 @@ def send_telegram(message):
         requests.post(url, data=payload, timeout=10).raise_for_status()
     except Exception as e:
         post_log(f"텔레그램 전송 실패: {e}")
+
+def push_to_github(filename):
+    """실제 매수/매도 이벤트 발생 시에만 GitHub로 로그를 푸시하여 Streamlit 앱에 반영"""
+    post_log(f"GitHub로 {filename} 동기화 시도 중...")
+    try:
+        # 파일이 없을 수 있으므로 경로 확인 후 추가
+        log_path = os.path.join(os.path.dirname(__file__), filename)
+        subprocess.run(["git", "add", log_path], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        status = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True)
+        if status.stdout.strip():
+            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            subprocess.run(["git", "commit", "-m", f"Auto-update crypto logs: {timestamp}"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(["git", "push", "origin", "master"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            post_log(f"✅ {filename} GitHub 업로드 성공! Streamlit 대시보드 스냅샷이 갱신됩니다.")
+        else:
+            post_log("새로운 변경 사항이 없어 GitHub 업로드를 건너뜁니다.")
+    except Exception as e:
+        post_log(f"GitHub 자동 업로드 실패: {e}")
 
 def check_balance_defense(required_amount):
     """[방어 코드] 업비트 원화(KRW) 잔고 확인"""
@@ -114,6 +133,9 @@ def main():
                         )
                         send_telegram(final_report)
                         post_log(f"✅ {order_amount:,}원 매수 주문 체결 및 알림 전송 완료")
+                        
+                        # 앱 화면상에 보이기 위해 GitHub로 데이터 푸시 (매수 시 1회만)
+                        push_to_github("eth_dca.log")
                 else:
                     post_log(f"💤 {strategy_text}")
 
