@@ -160,5 +160,41 @@
             }
         ],
         "analysis": "## 긴급 리포트: AI/바이오 기술 주간 동향 분석 (2024년 X월 X주차)\n\n<b>[핵심 동향 요약]</b>\n\n*   <b>AI 과학자 실용화 가속:</b> Ginkgo Bioworks는 자율 연구소에 'AI 과학자'를 통합하여 세포 무배양 단백질 합성에서 40% 성능 향상을 달성했으며, C12.ai는 로봇 기반 'AI 과학자' 플랫폼으로 실험 자동화를 선도합니다. 이는 AI가 실제 연구 현장에서 유의미한 성과를 내고 있음을 보여줍니다.\n*   <b>대규모 기반 AI 모델 투자 폭증:</b> 前 Meta AI 수석 과학자 Yann LeCun이 '대규모 세계 모델(Large World Models)' 구축을 위해 10억 달러를 유치하며, 신약 개발 등 고도화된 AI 연구의 근간이 될 차세대 범용 AI 모델 개발에 막대한 자본이 투입되고 있습니다.\n*   <b>AI 신약 개발 시장 경쟁 심화 및 인재 쟁탈전:</b> AI 신약 개발 플랫폼 시장은 다수의 기업 출현으로 투자자들의 엄격한 검증에 직면하며 차별화된 역량이 요구됩니다. 동시에 Google Research가 Isomorphic Labs의 AI 과학자를 영입하는 등 빅테크 기업들의 AI 신약 개발 인재 확보 경쟁이 치열합니다.\n\n<b>[전략적 의미]</b>\n\nAI 과학자의 실질적 적용과 대규모 AI 모델 투자는 우리의 <i>'통합 AI 가상 연구소'</i>가 고성능 자율 연구 기능을 필수적으로 갖춰야 함을 시사합니다. 경쟁 심화와 투자자 검증 강화에 대비하여, 차별화된 AI 연구 역량을 확보하고 명확한 성과 창출에 집중해야 합니다. 최고 수준의 AI 인재 확보와 전략적 파트너십 구축을 통해, 기술적 우위를 선점하고 가상 연구소 구축을 가속화해야 합니다."
+    },
+    {
+        "date": "2026-03-30",
+        "researches": [
+            {
+                "title": "How to build an AI scientist: first peer-reviewed paper spills the secrets",
+                "journal": "웹 문서",
+                "date": "최근",
+                "url": "https://www.nature.com/articles/d41586-026-00899-w"
+            },
+            {
+                "title": "Towards Fully Automated AI Research, Now Published in <i>Nature ...",
+                "journal": "웹 문서",
+                "date": "최근",
+                "url": "https://sakana.ai/ai-scientist-nature/"
+            },
+            {
+                "title": "New AI scientist conducts its own research | UBC Science",
+                "journal": "웹 문서",
+                "date": "최근",
+                "url": "https://science.ubc.ca/news/2026-03/new-ai-scientist-conducts-its-own-research"
+            },
+            {
+                "title": "AI Scientist Publishes in Nature: Autonomous Research Breakthrough",
+                "journal": "웹 문서",
+                "date": "최근",
+                "url": "https://www.linkedin.com/posts/jeff-clune-56403a26_the-ai-scientist-towards-fully-automated-activity-7442631874096820225-fc5h"
+            },
+            {
+                "title": "Great late breaking results for The AI Scientist from the one and only ...",
+                "journal": "웹 문서",
+                "date": "최근",
+                "url": "https://x.com/j_foerst/status/2036881372925526243"
+            }
+        ],
+        "analysis": "<b>[이번 주 핵심 동향 요약]</b>\n\n*   <b>'AI Scientist'의 주요 연구 성과 및 공신력 확보:</b> 자율 연구 도구 'AI Scientist'가 세계 최고 권위 학술지 <i>Nature</i>에 게재되고, 2024년 첫 출시 이후 성공적으로 <i>동료 평가(peer review)</i>를 통과하며 기술의 신뢰성과 연구 역량을 입증했습니다.\n*   <b>연구 전 과정의 자율화 실현:</b> 아이디어 생성부터 문헌 조사, 실험 설계(코드 작성 및 버그 수정), 데이터 분석, 최종 연구 논문 작성 및 자체 평가에 이르기까지 연구의 거의 <i>전 과정(end-to-end automation)</i>을 AI가 자율적으로 수행하는 수준에 도달했습니다.\n*   <b>가속화되는 발전 속도:</b> 2024년 첫 출시 이후 빠르게 발전하여, 2025년 4월에는 'AI Scientist-v2'가 ICLR 워크숍의 인간 동료 평가를 통과할 수 있는 논문을 생성하는 등 <i>기술 발전 속도가 매우 빠르며</i>, 이는 시작에 불과함을 시사합니다.\n\n<b>[전략적 의미]</b>\n'AI Scientist'의 등장은 가상 연구소 내 <i><b>연구 생산성을 극대화</b></i>하고, 신약 개발 및 기초 연구의 <i><b>탐색 시간을 획기적으로 단축</b></i>시킬 핵심 동력이 될 것입니다.\n이는 단순한 시뮬레이션 환경을 넘어, AI가 <i><b>자율적으로 연구 가설을 수립하고 검증하며 결과를 도출</b></i>하는 <i><b>'지능형 가상 연구소' 구축</b></i>의 현실화를 앞당깁니다.\n따라서, 우리는 AI의 연구 결과물을 <i><b>정확하게 평가하고 AI의 한계를 보완하며 전략적 방향을 제시하는 '인간 연구자'의 역할 재정립</b></i>에 집중해야 합니다."
     }
 ]
