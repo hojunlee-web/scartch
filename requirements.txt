@@ -5,3 +5,5 @@ google-genai
 python-dotenv
 requests
 matplotlib
+pyupbit
+google-generativeai
